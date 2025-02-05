@@ -1,3 +1,11 @@
+import BestProduct from "@/src/components/market/BestProduct";
+import SellingProductHeader from "@/src/components/market/SellingProductHeader";
+
 export default function Market() {
-  return <>중고마켓페이지</>;
+  return (
+    <div className="w-[1200px] mx-auto">
+      <BestProduct />
+      <SellingProductHeader />
+    </div>
+  );
 }

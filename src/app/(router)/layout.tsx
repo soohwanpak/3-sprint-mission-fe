@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Footer from "@/src/components/shared/Footer";
 import Header from "@/src/components/shared/Header";
