@@ -1,12 +1,15 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { axiosProductById, Product } from "@/src/utils/getAllProduct";
+import ProductInfo from "@/src/components/productDetail/ProductInfo";
+import ProductComment from "@/src/components/productDetail/ProductComment";
 
 export default function ProductDetail() {
   const { productId } = useParams();
+  const productIdStr = Array.isArray(productId) ? productId[0] : productId;
 
   const {
     data: product,
@@ -17,9 +20,6 @@ export default function ProductDetail() {
     queryFn: () => axiosProductById(productId as string),
     enabled: !!productId,
   });
-
-
-  console.log(product);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
@@ -35,64 +35,10 @@ export default function ProductDetail() {
           width={486}
           height={486}
         />
-        <div className="ml-[24px]">
-          <div className="text-[24px] font-semibold leading-[32px] text-left text-[#1F2937]">
-            {product.name}
-          </div>
-          <div className="text-[40px] font-semibold leading-[47.73px] text-left text-[#1F2937] mt-[16px]">
-            {product.price.toLocaleString()}원
-          </div>
-          <div className="border-b border-[#E5E7EB] w-[100] mx-auto mt-[16px] "></div>
-          <div className="text-[16px] font-semibold leading-[26px] text-left text-[#4B5563] mt-[16px]">
-            상품소개
-          </div>
-          <div className="text-[16px] font-normal leading-[26px] text-left text-[#4B5563] mt-[16px]">
-            {product.description}
-          </div>
-          <div className="text-[16px] font-semibold leading-[26px] text-left text-[#4B5563] mt-[16px]">
-            상품 태그
-          </div>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {product?.tags?.map((tag, index) => (
-              <div
-                key={index}
-                className="h-[36px] rounded-[26px] bg-[#F3F4F6] px-[16px] py-[6px] flex items-center justify-start text-[#1F2937] font-[500] text-[16px]"
-              >
-                #{tag}
-              </div>
-            ))}
-          </div>
-          <div className="mt-[62px] w-[690px] flex flex-row justify-between items-center">
-            <div className="flex">
-              <Image
-                src="/userImage.png"
-                alt="userImage"
-                className=""
-                width={40}
-                height={40}
-              />
-              <div className="ml-[16px]">
-                <div>{product.user?.nickname}</div>
-                <div>
-                  {new Date(product.createdAt).toLocaleDateString("ko-KR")}
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-[10px] items-center rounded-[35px] border border-[#E5E7EB] px-[12px] py-[4px]">
-              <Image
-                src="/like.png"
-                alt="like"
-                className=""
-                width={32}
-                height={32}
-              />
-              <div className="text-[16px] font-[500] leading-[26px] text-left text-[#6B7280]">
-                {product.like}
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductInfo product={product} />
       </div>
+      <div className="border-b border-[#E5E7EB] w-full mx-auto mt-[40px]" />
+      <ProductComment productId={productIdStr} />
     </div>
   );
 }

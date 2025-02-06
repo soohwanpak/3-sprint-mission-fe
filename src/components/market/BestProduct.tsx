@@ -46,15 +46,12 @@ export default function BestProduct() {
               height={282}
             />
             <div className="flex flex-col gap-3">
-              {/* 상품 이름 */}
               <div className="text-[14px] font-[600] leading-[24px] text-left text-[#1F2937]">
                 {product.name}
               </div>
-              {/* 가격 */}
               <div className="text-[16px] font-[700] leading-[26px] text-left text-[#1F2937]">
                 {product.price.toLocaleString()}원
               </div>
-              {/* 좋아요 수 */}
               <div className="flex flex-row items-center gap-1">
                 <Image
                   src="/heartIcon.svg"

@@ -40,10 +40,19 @@ export default function SellingProductHeader() {
           판매중인 상품
         </div>
         <div className="flex flex-row items-center gap-[12px]">
-          <input
-            placeholder="검색할 상품을 입력해주세요"
-            className="w-[325px] h-[42px] px-[20px] py-[9px] rounded-[12px] bg-[#F3F4F6] outline-none"
-          />
+          <div className="relative w-full items-center">
+            <Image
+              src="/search.png"
+              alt="search"
+              className="absolute left-[10px] top-1/2 transform -translate-y-1/2"
+              width={24}
+              height={24}
+            />
+            <input
+              placeholder="검색할 상품을 입력해주세요"
+              className="w-[325px] h-[42px] px-[20px] py-[9px] pl-[35px] rounded-[12px] bg-[#F3F4F6] outline-none"
+            />
+          </div>
           <Link href="/productRegistration">
             <div className="flex justify-center items-center w-[133px] h-[42px] px-[23px] py-[12px] rounded-[8px] cursor-pointer bg-[#3692FF] text-[12px] font-semibold leading-[26px] text-left text-[#F3F4F6]">
               상품 등록하기
@@ -77,15 +86,12 @@ export default function SellingProductHeader() {
                 height={282}
               />
               <div className="flex flex-col gap-3 mt-2">
-                {/* 상품 이름 */}
                 <div className="text-[14px] font-[600] leading-[24px] text-left text-[#1F2937]">
                   {product.name}
                 </div>
-                {/* 가격 */}
                 <div className="text-[16px] font-[700] leading-[26px] text-left text-[#1F2937]">
                   {product.price.toLocaleString()}원
                 </div>
-                {/* 좋아요 수 */}
                 <div className="flex flex-row items-center gap-1">
                   <Image
                     src="/heartIcon.svg"
