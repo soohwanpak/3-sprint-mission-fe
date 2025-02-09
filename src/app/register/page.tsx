@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRegisterForm } from "./useRegisterForm";
+import { useRegisterForm } from "../../hook/useRegisterForm";
 
 export default function Register() {
   const { register, handleSubmit, onSubmit } = useRegisterForm();

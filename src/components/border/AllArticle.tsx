@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { axiosArticles, Article } from "@/src/utils/getAllProduct";
+import { axiosArticles, Article } from "@/src/utils/axios";
 import Image from "next/image";
 import Link from "next/link";
 import Dropdown from "../shared/Dropdown";
@@ -10,11 +10,17 @@ import Dropdown from "../shared/Dropdown";
 export default function AllArticle() {
   const [selectedSort, setSelectedSort] = useState<"latest" | "like">("latest");
   const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState(6);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: articles = [], isLoading } = useQuery<Article[]>({
-    queryKey: ["articles", selectedSort, searchQuery],
-    queryFn: () => axiosArticles(selectedSort, searchQuery),
+  const { data: { articles = [], total = 0 } = {}, isLoading } = useQuery({
+    queryKey: ["articles", selectedSort, searchTerm, pageSize],
+    queryFn: () => axiosArticles(selectedSort, searchTerm, pageSize),
   });
+
+  const handleSearch = () => {
+    setSearchTerm(searchQuery);
+  };
 
   return (
     <div className="w-[1200px] mx-auto mt-[40px]">
@@ -34,15 +40,17 @@ export default function AllArticle() {
           <Image
             src="/search.png"
             alt="search"
-            className="absolute left-[10px] top-1/2 transform -translate-y-1/2"
+            className="absolute left-[10px] top-1/2 transform -translate-y-1/2 cursor-pointer"
             width={24}
             height={24}
+            onClick={handleSearch}
           />
           <input
             className="outline-none w-[1054px] pl-[40px] h-[42px] px-[20px] py-[9px] rounded-[12px] bg-[#F3F4F6] text-[16px] font-normal leading-[26px] text-left text-[#9CA3AF]"
             placeholder="검색할 게시글을 입력해주세요"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
         </div>
         <Dropdown
@@ -108,6 +116,15 @@ export default function AllArticle() {
             </div>
           </div>
         ))
+      )}
+
+      {pageSize < total && (
+        <div
+          onClick={() => setPageSize((prev) => prev + 3)}
+          className="w-[350px] h-[40px] border border-[#E5E7EB] font-[600] bg-[#E5E7EB] rounded-lg flex justify-center items-center mx-auto mt-4 cursor-pointer"
+        >
+          더보기
+        </div>
       )}
     </div>
   );

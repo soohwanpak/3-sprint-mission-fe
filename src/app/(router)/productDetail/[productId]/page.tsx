@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { axiosProductById, Product } from "@/src/utils/getAllProduct";
+import { axiosProductById, Product } from "@/src/utils/axios";
 import ProductInfo from "@/src/components/productDetail/ProductInfo";
 import ProductComment from "@/src/components/productDetail/ProductComment";
 

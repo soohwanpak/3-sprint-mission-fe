@@ -6,7 +6,7 @@ import {
   axiosCreateProductComment,
   axiosDeleteProductComment,
   axiosProductComments,
-} from "@/src/utils/getAllProduct";
+} from "@/src/utils/axios";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -126,13 +126,13 @@ export default function ProductComment({ productId }: ProductCommentProps) {
                 <div className="absolute right-3 top-10 w-[100px] bg-white rounded-md border border-[#D1D5DB] z-50">
                   <button
                     onClick={() => handleDropdownAction("수정", c.id)}
-                    className="w-full text-left px-4 py-2 text-[14px] text-center text-gray-700"
+                    className="w-full px-4 py-2 text-[14px] text-center text-gray-700"
                   >
                     수정
                   </button>
                   <button
                     onClick={() => handleDropdownAction("삭제", c.id)}
-                    className="w-full text-left px-4 py-2 text-center text-[14px] text-red-500"
+                    className="w-full px-4 py-2 text-center text-[14px] text-red-500"
                   >
                     삭제
                   </button>

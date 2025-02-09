@@ -4,34 +4,40 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Dropdown from "../shared/Dropdown";
 import Image from "next/image";
-import { axiosProduct, Product } from "@/src/utils/getAllProduct";
+import { axiosProduct, Product } from "@/src/utils/axios";
 import Link from "next/link";
 
 export default function SellingProductHeader() {
   const [selectedSort, setSelectedSort] = useState("최신순");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
-    data: products = [],
+    data: { products = [], total = 0 } = {},
     isLoading,
     error,
-  } = useQuery<Product[]>({
-    queryKey: ["products"],
-    queryFn: axiosProduct,
+  } = useQuery({
+    queryKey: ["products", searchTerm, selectedSort, page, pageSize],
+    queryFn: () =>
+      axiosProduct(
+        searchTerm,
+        selectedSort === "좋아요순" ? "like" : "latest",
+        page,
+        pageSize
+      ),
   });
+
+  const handleSearch = () => {
+    setSearchTerm(searchQuery);
+    setPage(1);
+  };
+
+  const totalPages = Math.ceil(total / pageSize);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
-
-  const sortedProducts = [...products]
-    .sort((a, b) => {
-      if (selectedSort === "최신순") {
-        return b.id.localeCompare(a.id);
-      } else if (selectedSort === "좋아요순") {
-        return b.like - a.like;
-      }
-      return 0;
-    })
-    .slice(0, 10);
 
   return (
     <div>
@@ -44,13 +50,18 @@ export default function SellingProductHeader() {
             <Image
               src="/search.png"
               alt="search"
-              className="absolute left-[10px] top-1/2 transform -translate-y-1/2"
+              className="absolute left-[10px] top-1/2 transform -translate-y-1/2 cursor-pointer"
               width={24}
               height={24}
+              onClick={handleSearch}
             />
             <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="검색할 상품을 입력해주세요"
-              className="w-[325px] h-[42px] px-[20px] py-[9px] pl-[35px] rounded-[12px] bg-[#F3F4F6] outline-none"
+              className="w-[325px] h-[42px] px-[20px] py-[9px] pl-[35px] rounded-[12px] bg-[#F3F4F6] text-[#9CA3AF] text-[16px] outline-none"
             />
           </div>
           <Link href="/productRegistration">
@@ -71,8 +82,8 @@ export default function SellingProductHeader() {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-[16px] w-[1200px] my-[24px]">
-        {sortedProducts.map((product) => (
+      <div className="flex flex-wrap justify-start gap-[16px] w-[1200px] my-[24px] ml-5">
+        {products.map((product) => (
           <Link key={product.id} href={`/productDetail/${product.id}`} passHref>
             <div
               key={product.id}
@@ -108,6 +119,34 @@ export default function SellingProductHeader() {
             </div>
           </Link>
         ))}
+      </div>
+      <div className="flex justify-center my-14 gap-2">
+        <Image
+          src="/right.png"
+          alt="right"
+          className={`cursor-pointer rounded-lg ${page === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+          width={40}
+          height={40}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+        />
+        {[...Array(totalPages)].map((_, index) => (
+          <div
+            key={index + 1}
+            onClick={() => setPage(index + 1)}
+            className={`w-[40px] h-[40px] rounded-full flex items-center justify-center cursor-pointer border border-[#E5E7EB]
+        ${page === index + 1 ? "bg-[#2F80ED] text-[#F9FAFB]" : "bg-[#FFFFFF] text-[black]"}`}
+          >
+            {index + 1}
+          </div>
+        ))}
+        <Image
+          src="/left.png"
+          alt="left"
+          className={`cursor-pointer rounded-lg ${page === totalPages ? "opacity-50 cursor-not-allowed" : ""}`}
+          width={40}
+          height={40}
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+        />
       </div>
     </div>
   );

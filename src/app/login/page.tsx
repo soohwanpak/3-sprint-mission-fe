@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useLoginForm } from "./useLoginForm";
+import { useLoginForm } from "../../hook/useLoginForm";
 
 export default function Login() {
   const { register, handleSubmit, onSubmit } = useLoginForm();

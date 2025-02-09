@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuthStore } from "@/src/store/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosCreateArticle } from "@/src/utils/getAllProduct";
+import { axiosCreateArticle } from "@/src/utils/axios";
 import { useRouter } from "next/navigation";
 
 export default function ArticleWrite() {

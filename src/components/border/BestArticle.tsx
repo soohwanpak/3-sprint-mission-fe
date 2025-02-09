@@ -1,6 +1,6 @@
 "use client";
 
-import { Article, getAllArticles } from "@/src/utils/getAllProduct";
+import { Article, getAllArticles } from "@/src/utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
@@ -70,6 +70,8 @@ export default function BestArticle() {
             </div>
           </div>
         ))}
+
+
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Product } from "@/src/utils/getAllProduct";
+import { Product } from "@/src/utils/axios";
 
 interface ProductInfoProps {
   product: Product;
@@ -23,14 +23,14 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         {product.description}
       </div>
 
-      <div className="text-[16px] font-semibold leading-[26px] text-left text-[#4B5563] mt-[16px]">
+      <div className="text-[16px] font-[600] leading-[26px] text-left text-[#4B5563] mt-[16px]">
         상품 태그
       </div>
       <div className="flex flex-wrap gap-2 mt-2">
         {product?.tags?.map((tag, index) => (
           <div
             key={index}
-            className="h-[36px] rounded-[26px] bg-[#F3F4F6] px-[16px] py-[6px] flex items-center justify-start text-[#1F2937] font-[500] text-[16px]"
+            className="h-[36px] rounded-[26px] bg-[#F3F4F6] px-[16px] py-[6px] flex items-center justify-start text-[#1F2937] font-[600] text-[16px]"
           >
             #{tag}
           </div>

@@ -3,10 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/src/store/auth";
+import { useQuery } from "@tanstack/react-query";
+import { getUserNickname } from "@/src/utils/axios";
 
 export default function HeaderLogin() {
-  const { logout } = useAuthStore();
+  const { userId, logout } = useAuthStore();
 
+  const { data: nickname, isLoading } = useQuery({
+    queryKey: ["userNickname", userId],
+    queryFn: () => (userId ? getUserNickname(userId) : Promise.resolve("")),
+    enabled: !!userId,
+  });
   return (
     <div className="flex flex-row justify-between items-center h-[70px] px-[200px]">
       <div className="flex flex-row items-center justify-center gap-6">
@@ -32,14 +39,28 @@ export default function HeaderLogin() {
           </Link>
         </div>
       </div>
-      <Link href="/">
-        <div
-          onClick={logout}
-          className="flex justify-center min-w-[128px] h-[48px] px-[23px] py-[12px] text-[16px] font-semibold leading-[26px] text-[white] rounded-[8px] bg-[#3692FF]"
-        >
-          로그아웃
+      <div className="flex gap-5">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/userImage.png"
+            alt="userImage"
+            className="cursor-pointer"
+            width={40}
+            height={40}
+          />
+          <div className="font-[600] text-[18px] leading-[21.78px] text-[#4B5563]">
+            {nickname}
+          </div>
         </div>
-      </Link>
+        <Link href="/">
+          <div
+            onClick={logout}
+            className="flex justify-center min-w-[128px] h-[48px] px-[23px] py-[12px] text-[16px] font-semibold leading-[26px] text-[white] rounded-[8px] bg-[#3692FF]"
+          >
+            로그아웃
+          </div>
+        </Link>
+      </div>
     </div>
   );
 }
